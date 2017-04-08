@@ -1,16 +1,15 @@
 package com.ken.wms.security.realms;
 
 import com.ken.wms.common.service.Interface.RepositoryAdminManageService;
-import com.ken.wms.dao.AccessRecordMapper;
-import com.ken.wms.domain.AccessRecordDO;
+import com.ken.wms.common.service.Interface.SystemLogService;
 import com.ken.wms.domain.RepositoryAdmin;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.RepositoryAdminManageServiceException;
+import com.ken.wms.exception.SystemLogServiceException;
 import com.ken.wms.exception.UserInfoServiceException;
 import com.ken.wms.security.service.Interface.UserInfoService;
 import com.ken.wms.security.util.EncryptingModel;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -20,9 +19,10 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
     @Autowired
     private RepositoryAdminManageService repositoryAdminManageService;
     @Autowired
-    private AccessRecordMapper accessRecordMapper;
+    private SystemLogService systemLogService;
 
     /**
      * 对用户进行角色授权
@@ -75,16 +75,12 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
 
                         // 记录用户登陆状态，用于作登出日志
                         session.setAttribute("isAuthenticate", "true");
-                        AccessRecordDO accessRecord = new AccessRecordDO();
-                        accessRecord.setUserID((Integer) session.getAttribute("userID"));
-                        accessRecord.setUserName((String) session.getAttribute("userName"));
-                        accessRecord.setAccessType("登入");
-                        accessRecord.setAccessTime(new Date());
-                        accessRecord.setAccessIP(session.getHost());
-
-                        accessRecordMapper.insertAccessRecord(accessRecord);
+                        Integer userID_integer = (Integer) session.getAttribute("userID");
+                        String userName = (String) session.getAttribute("userName");
+                        String accessIP = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+                        systemLogService.insertAccessRecord(userID_integer, userName, accessIP, SystemLogService.ACCESS_TYPE_LOGIN);
                     }
-                } catch (UserInfoServiceException | RepositoryAdminManageServiceException | PersistenceException e) {
+                } catch (UserInfoServiceException | RepositoryAdminManageServiceException | SystemLogServiceException e) {
                     // do logger
                 }
             }

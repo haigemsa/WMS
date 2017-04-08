@@ -1,11 +1,15 @@
 package com.ken.wms;
 
 import com.ken.wms.common.service.Interface.StockRecordManageService;
+import com.ken.wms.common.service.Interface.SystemLogService;
+import com.ken.wms.dao.AccessRecordMapper;
 import com.ken.wms.dao.StockInMapper;
 import com.ken.wms.dao.StockOutMapper;
+import com.ken.wms.domain.AccessRecordDO;
 import com.ken.wms.domain.StockInDO;
 import com.ken.wms.domain.StockOutDO;
 import com.ken.wms.exception.StockRecordManageServiceException;
+import com.ken.wms.exception.SystemLogServiceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,7 @@ import java.util.Map;
  */
 @ContextConfiguration(locations = "classpath:config/SpringApplicationConfiguration.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class StockMapperTest {
+public class MapperTest {
 
     @Autowired
     private
@@ -33,6 +37,23 @@ public class StockMapperTest {
     private StockOutMapper stockOutMapper;
     @Autowired
     private StockRecordManageService stockRecordManageService;
+    @Autowired
+    private AccessRecordMapper accessRecordMapper;
+    @Autowired
+    private SystemLogService systemLogService;
+
+    @Test
+    public void selectAccessRecordServiceTest() throws SystemLogServiceException {
+        Map<String, Object> result = systemLogService.selectAccessRecord(null, "all", "", "");
+        List<AccessRecordDO> accessRecordDOS = (List<AccessRecordDO>) result.get("data");
+        accessRecordDOS.forEach(System.out::println);
+    }
+
+    @Test
+    public void selectAccessRecordByUserIDTest(){
+        List<AccessRecordDO> accessRecordDOS = accessRecordMapper.selectAccessRecords(null, "all", null, null);
+        accessRecordDOS.forEach(System.out::println);
+    }
 
     @Test
     public void selectStockRecordTest() throws StockRecordManageServiceException {

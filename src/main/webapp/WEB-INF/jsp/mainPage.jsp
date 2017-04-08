@@ -218,7 +218,7 @@ pageEncoding="UTF-8"%>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
-                                           class="menu_item">登陆日志</a>
+                                           class="menu_item" name="pagecomponent/accessRecordManagement.html">登陆日志</a>
                                     </li>
                                 </shiro:hasRole>
                             </ul>

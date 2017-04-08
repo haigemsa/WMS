@@ -5,6 +5,7 @@ import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseUtil;
 import com.ken.wms.domain.StockRecordDTO;
 import com.ken.wms.exception.StockRecordManageServiceException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,37 +98,53 @@ public class StockRecordManageHandler {
     /**
      * 查询出入库记录
      *
-     * @param searchType   查询类型（查询所有或仅查询入库记录或仅查询出库记录）
-     * @param repositoryID 查询记录所对应的仓库ID
-     * @param endDateStr   查询的记录起始日期
-     * @param startDateStr 查询的记录结束日期
-     * @param limit        分页大小
-     * @param offset       分页偏移值
+     * @param searchType      查询类型（查询所有或仅查询入库记录或仅查询出库记录）
+     * @param repositoryIDStr 查询记录所对应的仓库ID
+     * @param endDateStr      查询的记录起始日期
+     * @param startDateStr    查询的记录结束日期
+     * @param limit           分页大小
+     * @param offset          分页偏移值
      * @return 返回一个Map，其中：Key为rows的值代表所有记录数据，Key为total的值代表记录的总条数
      */
     @SuppressWarnings({"SingleStatementInBlock", "unchecked"})
     @RequestMapping(value = "searchStockRecord", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> searchStockRecord(@RequestParam("searchType") String searchType,
-                                          @RequestParam("repositoryID") Integer repositoryID,
+                                          @RequestParam("repositoryID") String repositoryIDStr,
                                           @RequestParam("startDate") String startDateStr,
                                           @RequestParam("endDate") String endDateStr,
                                           @RequestParam("limit") int limit,
                                           @RequestParam("offset") int offset) throws ParseException, StockRecordManageServiceException {
         // 初始化 Response
         Response responseContent = responseUtil.newResponseInstance();
-
-        // 转到 Service 执行查询
-        Map<String, Object> queryResult = stockRecordManageService.selectStockRecord(repositoryID, startDateStr, endDateStr, searchType, offset, limit);
-        List<StockRecordDTO> stockRecordDTOS;
+        List<StockRecordDTO> rows = null;
         long total = 0;
-        if (queryResult != null) {
-            stockRecordDTOS = (List<StockRecordDTO>) queryResult.get("data");
-            total = (long) queryResult.get("total");
-        } else
-            stockRecordDTOS = new ArrayList<>(10);
 
-        responseContent.setCustomerInfo("rows", stockRecordDTOS);
+        // 参数检查
+        String regex = "([0-9]{4})-([0-9]{2})-([0-9]{2})";
+        boolean startDateFormatCheck = (StringUtils.isEmpty(startDateStr) || startDateStr.matches(regex));
+        boolean endDateFormatCheck = (StringUtils.isEmpty(endDateStr) || endDateStr.matches(regex));
+        boolean repositoryIDCheck = (StringUtils.isEmpty(repositoryIDStr) || StringUtils.isNumeric(repositoryIDStr));
+
+        if (startDateFormatCheck && endDateFormatCheck && repositoryIDCheck) {
+            Integer repositoryID = -1;
+            if (StringUtils.isNumeric(repositoryIDStr)) {
+                repositoryID = Integer.valueOf(repositoryIDStr);
+            }
+
+            // 转到 Service 执行查询
+            Map<String, Object> queryResult = stockRecordManageService.selectStockRecord(repositoryID, startDateStr, endDateStr, searchType, offset, limit);
+            if (queryResult != null) {
+                rows = (List<StockRecordDTO>) queryResult.get("data");
+                total = (long) queryResult.get("total");
+            }
+        } else
+            responseContent.setResponseMsg("Request argument error");
+
+        if (rows == null)
+            rows = new ArrayList<>(0);
+
+        responseContent.setCustomerInfo("rows", rows);
         responseContent.setResponseTotal(total);
         return responseContent.generateResponse();
     }

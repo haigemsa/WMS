@@ -4,7 +4,7 @@
 <script>
     // 出入库记录查询参数
     search_type = 'none'
-    search_repositoryID = -1
+    search_repositoryID = ''
     search_start_date = null
     search_end_date = null
 
@@ -179,21 +179,21 @@
                     <div class="form-group">
                         <label class="form-label">仓库编号：</label>
                         <select class="form-control" id="search_repository_ID">
-                            <option value="-1">所有仓库</option>
+                            <option value="">所有仓库</option>
                         </select>
                     </div>
                 </form>
             </div>
-            <div class="col-md-3">
-                <form action="" class="form-inline">
-                    <label class="form-label">记录过滤：</label>
-                    <select name="" id="search_type" class="form-control">
-                        <option value="all">显示所有</option>
-                        <option value="stockInOnly">仅显示入库记录</option>
-                        <option value="stockOutOnly">仅显示出库记录</option>
-                    </select>
-                </form>
-            </div>
+                <div class="col-md-3">
+                    <form action="" class="form-inline">
+                        <label class="form-label">记录过滤：</label>
+                        <select name="" id="search_type" class="form-control">
+                            <option value="all">显示所有</option>
+                            <option value="stockInOnly">仅显示入库记录</option>
+                            <option value="stockOutOnly">仅显示出库记录</option>
+                        </select>
+                    </form>
+                </div>
             <div class="col-md-2">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>
