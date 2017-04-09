@@ -5,9 +5,8 @@ import com.ken.wms.common.service.Interface.SystemLogService;
 import com.ken.wms.dao.AccessRecordMapper;
 import com.ken.wms.dao.StockInMapper;
 import com.ken.wms.dao.StockOutMapper;
-import com.ken.wms.domain.AccessRecordDO;
-import com.ken.wms.domain.StockInDO;
-import com.ken.wms.domain.StockOutDO;
+import com.ken.wms.dao.UserOperationRecordMapper;
+import com.ken.wms.domain.*;
 import com.ken.wms.exception.StockRecordManageServiceException;
 import com.ken.wms.exception.SystemLogServiceException;
 import org.junit.Test;
@@ -41,6 +40,38 @@ public class MapperTest {
     private AccessRecordMapper accessRecordMapper;
     @Autowired
     private SystemLogService systemLogService;
+    @Autowired
+    private UserOperationRecordMapper userOperationRecordMapper;
+
+    @Test
+    public void selectUserOperationRecordServiceTest() throws SystemLogServiceException {
+        Map<String, Object> result = systemLogService.selectUserOperationRecord(1001, "", "");
+        List<UserOperationRecordDTO> userOperationRecordDTOS = (List<UserOperationRecordDTO>) result.get("data");
+        userOperationRecordDTOS.forEach(System.out::println);
+    }
+
+    @Test
+    public void addUserOperationRecordServiceTest() throws SystemLogServiceException {
+        systemLogService.insertUserOperationRecord(1001, "ken", "insert new row", "fail");
+    }
+
+    @Test
+    public void addUserOperationRecordTest(){
+        UserOperationRecordDO userOperationRecordDO = new UserOperationRecordDO();
+        userOperationRecordDO.setUserID(1001);
+        userOperationRecordDO.setUserName("ken");
+        userOperationRecordDO.setOperationName("set param");
+        userOperationRecordDO.setOperationTime(new Date());
+        userOperationRecordDO.setOperationResult("success");
+
+        userOperationRecordMapper.insertUserOperationRecord(userOperationRecordDO);
+    }
+
+    @Test
+    public void selectUserOperationRecordTest(){
+        List<UserOperationRecordDO> userOperationRecordDOS = userOperationRecordMapper.selectUserOperationRecord(1002, null, null);
+        userOperationRecordDOS.forEach(System.out::println);
+    }
 
     @Test
     public void selectAccessRecordServiceTest() throws SystemLogServiceException {

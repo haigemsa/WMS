@@ -8,6 +8,7 @@ import com.ken.wms.dao.*;
 import com.ken.wms.domain.*;
 import com.ken.wms.exception.StockRecordManageServiceException;
 import com.ken.wms.exception.StorageManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      * @param number       入库数量
      * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
      */
+    @UserOperation(value = "货物入库")
     @Override
     public boolean stockInOperation(Integer supplierID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
 
@@ -91,6 +93,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      * @param number       出库数量
      * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
      */
+    @UserOperation(value = "货物出库")
     @Override
     public boolean stockOutOperation(Integer customerID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
 

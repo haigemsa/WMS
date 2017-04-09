@@ -77,7 +77,8 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
                         session.setAttribute("isAuthenticate", "true");
                         Integer userID_integer = (Integer) session.getAttribute("userID");
                         String userName = (String) session.getAttribute("userName");
-                        String accessIP = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+//                        String accessIP = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+                        String accessIP = session.getHost();
                         systemLogService.insertAccessRecord(userID_integer, userName, accessIP, SystemLogService.ACCESS_TYPE_LOGIN);
                     }
                 } catch (UserInfoServiceException | RepositoryAdminManageServiceException | SystemLogServiceException e) {

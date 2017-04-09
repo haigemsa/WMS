@@ -7,6 +7,7 @@ import com.ken.wms.common.util.ExcelUtil;
 import com.ken.wms.dao.*;
 import com.ken.wms.domain.*;
 import com.ken.wms.exception.RepositoryManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -198,6 +199,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
      * @param repository 仓库信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "添加仓库信息")
     @Override
     public boolean addRepository(Repository repository) throws RepositoryManageServiceException {
 
@@ -223,6 +225,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
      * @param repository 仓库信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改仓库信息")
     @Override
     public boolean updateRepository(Repository repository) throws RepositoryManageServiceException {
 
@@ -249,6 +252,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
      * @param repositoryId 仓库ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "删除仓库信息")
     @Override
     public boolean deleteRepository(Integer repositoryId) throws RepositoryManageServiceException {
 
@@ -288,6 +292,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入仓库信息")
     @Override
     public Map<String, Object> importRepository(MultipartFile file) throws RepositoryManageServiceException {
         // 初始化结果集
@@ -331,6 +336,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
      * @param repositories 包含若干条 Supplier 信息的 List
      * @return excel 文件
      */
+    @UserOperation(value = "导出仓库信息")
     @Override
     public File exportRepository(List<Repository> repositories) {
         if (repositories == null)

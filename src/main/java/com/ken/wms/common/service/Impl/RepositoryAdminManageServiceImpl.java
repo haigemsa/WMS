@@ -10,6 +10,7 @@ import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.RepositoryAdminManageServiceException;
 import com.ken.wms.exception.UserInfoServiceException;
 import com.ken.wms.security.service.Interface.UserInfoService;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -178,6 +179,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param repositoryAdmin 仓库管理员信息
      * @return 返回一个boolean值，值为true代表添加成功，否则代表失败
      */
+    @UserOperation(value = "添加仓库管理员信息")
     @Override
     public boolean addRepositoryAdmin(RepositoryAdmin repositoryAdmin) throws RepositoryAdminManageServiceException {
 
@@ -198,7 +200,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
                     userInfoService.insertUserInfo(userInfo);
                     // 添加仓库管理员信息到数据库中
                     repositoryAdminMapper.insert(repositoryAdmin);
-                } catch (PersistenceException |UserInfoServiceException e) {
+                } catch (PersistenceException | UserInfoServiceException e) {
                     throw new RepositoryAdminManageServiceException(e);
                 }
 
@@ -214,6 +216,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param repositoryAdmin 仓库管理员信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改仓库管理员信息")
     @Override
     public boolean updateRepositoryAdmin(RepositoryAdmin repositoryAdmin) throws RepositoryAdminManageServiceException {
 
@@ -248,6 +251,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param repositoryAdminID 仓库管理员ID
      * @return 返回一个boolean值，值为true代表删除成功，否则代表失败
      */
+    @UserOperation(value = "删除仓库管理员信息")
     @Override
     public boolean deleteRepositoryAdmin(Integer repositoryAdminID) throws RepositoryAdminManageServiceException {
 
@@ -277,6 +281,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param repositoryID      所指派的仓库ID
      * @return 返回一个 boolean 值，值为 true 表示仓库指派成功，否则表示失败
      */
+    @UserOperation(value = "指派仓库管理员")
     @Override
     public boolean assignRepository(Integer repositoryAdminID, Integer repositoryID) throws RepositoryAdminManageServiceException {
 
@@ -298,6 +303,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入仓库管理员信息")
     @Override
     public Map<String, Object> importRepositoryAdmin(MultipartFile file) throws RepositoryAdminManageServiceException {
         // 初始化结果集
@@ -341,6 +347,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
      * @param repositoryAdmins 包含若干条 repository 信息的 List
      * @return Excel 文件
      */
+    @UserOperation(value = "导出仓库管理员信息")
     @Override
     public File exportRepositoryAdmin(List<RepositoryAdmin> repositoryAdmins) {
         File file = null;

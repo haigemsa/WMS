@@ -10,6 +10,7 @@ import com.ken.wms.dao.StockOutMapper;
 import com.ken.wms.domain.Customer;
 import com.ken.wms.domain.StockOutDO;
 import com.ken.wms.exception.CustomerManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -198,6 +199,8 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @param customer 客户信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "添加客户信息")
+    @Override
     public boolean addCustomer(Customer customer) throws CustomerManageServiceException {
 
         // 插入新的记录
@@ -223,6 +226,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @param customer 客户信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改客户信息")
     @Override
     public boolean updateCustomer(Customer customer) throws CustomerManageServiceException {
 
@@ -251,6 +255,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @param customerId 客户ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "删除客户信息")
     @Override
     public boolean deleteCustomer(Integer customerId) throws CustomerManageServiceException {
 
@@ -276,6 +281,8 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入客户信息")
+    @Override
     public Map<String, Object> importCustomer(MultipartFile file) throws CustomerManageServiceException {
         // 初始化结果集
         Map<String, Object> result = new HashMap<>();
@@ -320,6 +327,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @param customers 包含若干条 customer 信息的 List
      * @return Excel 文件
      */
+    @UserOperation(value = "导出客户信息")
     @Override
     public File exportCustomer(List<Customer> customers) {
         if (customers == null)

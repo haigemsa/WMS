@@ -9,6 +9,7 @@ import com.ken.wms.dao.SupplierMapper;
 import com.ken.wms.domain.StockInDO;
 import com.ken.wms.domain.Supplier;
 import com.ken.wms.exception.SupplierManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -195,6 +196,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @param supplier 供应商信息
      * @return 返回添加结果
      */
+    @UserOperation(value = "添加供应商信息")
     @Override
     public boolean addSupplier(Supplier supplier) throws SupplierManageServiceException {
 
@@ -223,6 +225,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @param supplier 供应商信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改供应商信息")
     @Override
     public boolean updateSupplier(Supplier supplier) throws SupplierManageServiceException {
 
@@ -253,6 +256,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @param supplierId 供应商ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "删除供应商信息")
     @Override
     public boolean deleteSupplier(Integer supplierId) {
 
@@ -272,6 +276,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入供应商信息")
     @Override
     public Map<String, Object> importSupplier(MultipartFile file) {
         // 初始化结果集
@@ -314,6 +319,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @param suppliers 包含若干条 Supplier 信息的 List
      * @return excel 文件
      */
+    @UserOperation(value = "导出供应商信息")
     @Override
     public File exportSupplier(List<Supplier> suppliers) {
         if (suppliers == null)

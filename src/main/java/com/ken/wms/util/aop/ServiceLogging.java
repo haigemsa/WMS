@@ -1,4 +1,4 @@
-package com.ken.wms.util;
+package com.ken.wms.util.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class ServiceLogging {
      *
      * @param joinPoint 切入点
      */
-    public void loggingMethodInvoke(JoinPoint joinPoint) {
+    public void loggingMethodInvoked(JoinPoint joinPoint) {
         if (methodInvokeLogger.isDebugEnabled()) {
             String methodName = joinPoint.getSignature().getName();
             Object[] args = joinPoint.getArgs();

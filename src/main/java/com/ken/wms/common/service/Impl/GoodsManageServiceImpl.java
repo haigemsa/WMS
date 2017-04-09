@@ -14,6 +14,7 @@ import com.ken.wms.domain.StockInDO;
 import com.ken.wms.domain.StockOutDO;
 import com.ken.wms.domain.Storage;
 import com.ken.wms.exception.GoodsManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -208,6 +209,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @param goods 货物信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "添加货物信息")
     @Override
     public boolean addGoods(Goods goods) throws GoodsManageServiceException {
 
@@ -232,6 +234,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @param goods 货物信息
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改货物信息")
     @Override
     public boolean updateGoods(Goods goods) throws GoodsManageServiceException {
 
@@ -256,6 +259,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @param goodsId 货物ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "删除货物信息")
     @Override
     public boolean deleteGoods(Integer goodsId) throws GoodsManageServiceException {
 
@@ -289,6 +293,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入货物信息")
     @Override
     public Map<String, Object> importGoods(MultipartFile file) throws GoodsManageServiceException {
         // 初始化结果集
@@ -332,6 +337,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @param goods 包含若干条 Supplier 信息的 List
      * @return excel 文件
      */
+    @UserOperation(value = "导出货物信息")
     @Override
     public File exportGoods(List<Goods> goods) {
         if (goods == null)

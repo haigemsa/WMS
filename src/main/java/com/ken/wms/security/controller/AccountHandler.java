@@ -82,7 +82,7 @@ public class AccountHandler {
                 errorMsg = "incorrectCredentials";
             } catch (AuthenticationException e) {
                 errorMsg = "authenticationError";
-//                e.printStackTrace();
+                e.printStackTrace();
             }
         } else {
             errorMsg = "already login";

@@ -109,7 +109,7 @@ public class StockRecordManageHandler {
     @SuppressWarnings({"SingleStatementInBlock", "unchecked"})
     @RequestMapping(value = "searchStockRecord", method = RequestMethod.GET)
     public @ResponseBody
-    Map<String, Object> searchStockRecord(@RequestParam("searchType") String searchType,
+    Map<String, Object> getStockRecord(@RequestParam("searchType") String searchType,
                                           @RequestParam("repositoryID") String repositoryIDStr,
                                           @RequestParam("startDate") String startDateStr,
                                           @RequestParam("endDate") String endDateStr,

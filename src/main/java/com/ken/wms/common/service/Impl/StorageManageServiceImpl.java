@@ -11,6 +11,7 @@ import com.ken.wms.domain.Goods;
 import com.ken.wms.domain.Repository;
 import com.ken.wms.domain.Storage;
 import com.ken.wms.exception.StorageManageServiceException;
+import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -273,6 +274,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param number       库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "添加库存记录")
     @Override
     public boolean addNewStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
         try {
@@ -314,6 +316,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param number       更新的库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "修改库存记录")
     @Override
     public boolean updateStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
         try {
@@ -345,6 +348,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param repositoryID 指定的仓库ID
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
+    @UserOperation(value = "删除库存记录")
     @Override
     public boolean deleteStorage(Integer goodsID, Integer repositoryID) throws StorageManageServiceException {
         try {
@@ -370,6 +374,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param file 保存有的库存记录的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
+    @UserOperation(value = "导入库存记录")
     @Override
     public Map<String, Object> importStorage(MultipartFile file) throws StorageManageServiceException {
         // 初始化结果集
@@ -430,6 +435,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      * @param storageList 保存有库存记录的List
      * @return excel 文件
      */
+    @UserOperation(value = "导出库存记录")
     @Override
     public File exportStorage(List<Storage> storageList) {
         if (storageList == null)
