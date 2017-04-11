@@ -2,6 +2,7 @@ package com.ken.wms.dao;
 
 import com.ken.wms.domain.UserOperationRecordDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author Ken
  * @since 2017/4/9.
  */
+@Repository
 public interface UserOperationRecordMapper {
 
     /**

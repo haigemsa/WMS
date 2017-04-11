@@ -2,6 +2,7 @@ package com.ken.wms.dao;
 
 
 import com.ken.wms.domain.Goods;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @author Ken
  *
  */
+@Repository
 public interface GoodsMapper {
 
 	/**

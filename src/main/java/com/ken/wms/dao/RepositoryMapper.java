@@ -9,6 +9,7 @@ import java.util.List;
  * @author Ken
  *
  */
+@org.springframework.stereotype.Repository
 public interface RepositoryMapper {
 
 	/**

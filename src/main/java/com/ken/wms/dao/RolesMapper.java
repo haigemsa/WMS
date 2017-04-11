@@ -1,10 +1,13 @@
 package com.ken.wms.dao;
 
+import org.springframework.stereotype.Repository;
+
 /**
  *
  * @author Ken
  * @since 2017/3/1.
  */
+@Repository
 public interface RolesMapper {
 
     /**
