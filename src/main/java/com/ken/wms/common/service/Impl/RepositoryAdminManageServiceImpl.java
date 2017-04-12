@@ -185,26 +185,28 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
 
         if (repositoryAdmin != null) {
             if (repositoryAdminCheck(repositoryAdmin)) {
-
-                // 为仓库管理员创建账户
-                UserInfoDTO userInfo = new UserInfoDTO();
-                userInfo.setUserID(repositoryAdmin.getId());
-                userInfo.setUserName(repositoryAdmin.getName());
-                userInfo.setPassword(repositoryAdmin.getId().toString());
-                List<String> roles = new ArrayList<>(10);
-                roles.add("commonAdmin");
-                userInfo.setRole(roles);
-
                 try {
-                    // 添加新创建的仓库管理员账户信息
-                    userInfoService.insertUserInfo(userInfo);
                     // 添加仓库管理员信息到数据库中
                     repositoryAdminMapper.insert(repositoryAdmin);
-                } catch (PersistenceException | UserInfoServiceException e) {
-                    throw new RepositoryAdminManageServiceException(e);
-                }
 
-                return true;
+                    // 获取插入数据后返回的用户ID
+                    Integer userID = repositoryAdmin.getId();
+                    if (userID == null)
+                        return false;
+
+                    // 为仓库管理员创建账户
+                    UserInfoDTO userInfo = new UserInfoDTO();
+                    userInfo.setUserID(userID);
+                    userInfo.setUserName(repositoryAdmin.getName());
+                    userInfo.setPassword(repositoryAdmin.getId().toString());
+                    userInfo.setRole(new ArrayList<>(Collections.singletonList("commonsAdmin")));
+
+                    // 添加新创建的仓库管理员账户信息
+                    return userInfoService.insertUserInfo(userInfo);
+
+                } catch (PersistenceException | UserInfoServiceException e) {
+                    throw new RepositoryAdminManageServiceException(e, "Fail to persist repository admin info");
+                }
             }
         }
         return false;

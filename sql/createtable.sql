@@ -1,8 +1,8 @@
-create database wms_db_test
+create database wms_db
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-use wms_db_test;
+use wms_db;
 
 # 创建数据表
 
@@ -61,7 +61,7 @@ create table wms_customer
     REPO_ADMIN_TEL varchar(20) not null,
     REPO_ADMIN_ADDRESS varchar(30) not null,
     REPO_ADMIN_BIRTH datetime not null,
-    REPO_ADMIN_REPOID int not null,
+    REPO_ADMIN_REPOID int,
     primary key(REPO_ADMIN_ID),
     foreign key (REPO_ADMIN_REPOID) references wms_respository(REPO_ID)
 )engine=innodb;

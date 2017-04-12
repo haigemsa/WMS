@@ -82,7 +82,8 @@ public class CustomerManageHandler {
     public
     @ResponseBody
     Map<String, Object> getCustomerList(@RequestParam("searchType") String searchType,
-                                        @RequestParam("offset") int offset, @RequestParam("limit") int limit,
+                                        @RequestParam("offset") int offset,
+                                        @RequestParam("limit") int limit,
                                         @RequestParam("keyWord") String keyWord) throws CustomerManageServiceException {
         // 初始化 Response
         Response responseContent = responseUtil.newResponseInstance();
@@ -134,14 +135,14 @@ public class CustomerManageHandler {
     @RequestMapping(value = "getCustomerInfo", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map<String, Object> getCustomerInfo(@RequestParam("customerID") int customerID) throws CustomerManageServiceException {
+    Map<String, Object> getCustomerInfo(@RequestParam("customerID") String customerID) throws CustomerManageServiceException {
         // 初始化 Response
         Response responseContent = responseUtil.newResponseInstance();
         String result = Response.RESPONSE_RESULT_ERROR;
 
         // 获取客户信息
         Customer customer = null;
-        Map<String, Object> queryResult = customerManageService.selectById(customerID);
+        Map<String, Object> queryResult = query(SEARCH_BY_ID, customerID, -1, -1);
         if (queryResult != null) {
             customer = (Customer) queryResult.get("data");
             if (customer != null) {
@@ -179,20 +180,27 @@ public class CustomerManageHandler {
     /**
      * 删除客户记录
      *
-     * @param customerID 客户ID
+     * @param customerIDStr 客户ID
      * @return 返回一个map，其中：key 为 result表示操作的结果，包括：success 与 error
      */
     @RequestMapping(value = "deleteCustomer", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map<String, Object> deleteCustomer(@RequestParam("customerID") int customerID) throws CustomerManageServiceException {
+    Map<String, Object> deleteCustomer(@RequestParam("customerID") String customerIDStr) throws CustomerManageServiceException {
         // 初始化 Response
         Response responseContent = responseUtil.newResponseInstance();
 
-        // 刪除
-        String result = customerManageService.deleteCustomer(customerID) ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
+        // 参数检查
+        if (StringUtils.isNumeric(customerIDStr)) {
+            // 转换为 Integer
+            Integer customerID = Integer.valueOf(customerIDStr);
 
-        responseContent.setResponseResult(result);
+            // 刪除
+            String result = customerManageService.deleteCustomer(customerID) ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
+            responseContent.setResponseResult(result);
+        } else
+            responseContent.setResponseResult(Response.RESPONSE_RESULT_ERROR);
+
         return responseContent.generateResponse();
     }
 

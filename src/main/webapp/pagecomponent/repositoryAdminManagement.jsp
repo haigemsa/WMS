@@ -367,7 +367,7 @@
 					var type;
 					if (response.result == "success") {
 						type = "success";
-						msg = "仓库管理员添加成功";
+						msg = "仓库管理员添加成功<br><p>(注意：仓库管理员的系统初始密码为该ID)</p>";
 					} else if (response.result == "error") {
 						type = "error";
 						msg = "仓库管理员添加失败";
@@ -543,7 +543,7 @@
 		} else if (type == "error") {
 			$('#info_success').addClass("hide");
 		}
-		$('#info_content').text(msg);
+		$('#info_content').html(msg);
 		$('#info_modal').modal("show");
 	}
 </script>
@@ -692,7 +692,7 @@
 							</div>
 							<div class="form-group">
 								<label for="BirthDate" class="control-label col-md-5 col-sm-5"> 
-									<span>出生日期:</span>
+									<span>出生日期:</span>
 								</label>
 								<div class="col-md-7 col-sm-7">
 									<input class="form_date form-control" value="" id="repositoryAdmin_birth" name="repositoryAdmin_birth" placeholder="出生日期">

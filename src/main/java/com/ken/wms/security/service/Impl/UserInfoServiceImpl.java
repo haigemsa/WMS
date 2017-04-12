@@ -175,16 +175,16 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @param userInfoDTO 需要添加的用户账户信息
      */
     @Override
-    public void insertUserInfo(UserInfoDTO userInfoDTO) throws UserInfoServiceException {
+    public boolean insertUserInfo(UserInfoDTO userInfoDTO) throws UserInfoServiceException {
         if (userInfoDTO == null)
-            return;
+            return false;
 
         // 检查数据是否有效
         Integer userID = userInfoDTO.getUserID();
         String userName = userInfoDTO.getUserName();
         String password = userInfoDTO.getPassword();
         if (userName == null || password == null)
-            return;
+            return false;
 
         try {
             // 对密码进行加密
@@ -197,19 +197,23 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfoDO.setUserName(userName);
             userInfoDO.setPassword(encryptPassword);
 
+            // 持久化用户信息
+            userInfoMapper.insert(userInfoDO);
+
             // 获取用户角色信息
             List<String> roles = userInfoDTO.getRole();
             Integer roleID;
-
-            // 持久化用户信息
-            userInfoMapper.insert(userInfoDO);
 
             // 持久化用户角色信息
             for (String role : roles) {
                 roleID = rolesMapper.getRoleID(role);
                 if (roleID != null)
                     userPermissionMapper.insert(userID, roleID);
+                else
+                    throw new UserInfoServiceException("The role of userInfo unavailable");
             }
+
+            return true;
 
         } catch (NoSuchAlgorithmException | PersistenceException e) {
             throw new UserInfoServiceException(e);

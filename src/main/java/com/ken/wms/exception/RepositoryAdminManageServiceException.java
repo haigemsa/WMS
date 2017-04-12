@@ -8,7 +8,7 @@ package com.ken.wms.exception;
  */
 public class RepositoryAdminManageServiceException extends BusinessException {
 
-    RepositoryAdminManageServiceException(){
+    public RepositoryAdminManageServiceException(){
         super();
     }
 
@@ -16,8 +16,11 @@ public class RepositoryAdminManageServiceException extends BusinessException {
         super(e);
     }
 
-    RepositoryAdminManageServiceException(Exception e, String exceptionDesc){
+    public RepositoryAdminManageServiceException(Exception e, String exceptionDesc){
         super(e, exceptionDesc);
     }
 
+    public RepositoryAdminManageServiceException(String exceptionDesc){
+        super(exceptionDesc);
+    }
 }
