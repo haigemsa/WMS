@@ -49,7 +49,7 @@ public interface UserInfoService {
      * 添加一条用户账户信息
      * @param userInfoDTO 需要添加的用户账户信息
      */
-    void insertUserInfo(UserInfoDTO userInfoDTO) throws UserInfoServiceException;
+    boolean insertUserInfo(UserInfoDTO userInfoDTO) throws UserInfoServiceException;
 
     /**
      * 获取用户的权限角色

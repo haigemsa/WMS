@@ -1,7 +1,9 @@
 package com.ken.wms.security.controller;
 
+import com.ken.wms.common.service.Interface.SystemLogService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseUtil;
+import com.ken.wms.exception.SystemLogServiceException;
 import com.ken.wms.exception.UserAccountServiceException;
 import com.ken.wms.security.service.Interface.AccountService;
 import com.ken.wms.security.util.CheckCodeGenerator;
@@ -11,6 +13,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +46,8 @@ public class AccountHandler {
     private CheckCodeGenerator checkCodeGenerator;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private SystemLogService systemLogService;
 
     private static final String USER_ID = "id";
     private static final String USER_NAME = "userName";
@@ -54,6 +59,7 @@ public class AccountHandler {
      * @param user 账户信息
      * @return 返回一个 Map 对象，其中包含登陆操作的结果
      */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -75,6 +81,15 @@ public class AccountHandler {
             // 执行登陆操作
             try {
                 currentUser.login(token);
+
+                // 设置登陆状态并记录
+                Session session = currentUser.getSession();
+                session.setAttribute("isAuthenticate", "true");
+                Integer userID_integer = (Integer) session.getAttribute("userID");
+                String userName = (String) session.getAttribute("userName");
+                String accessIP = session.getHost();
+                systemLogService.insertAccessRecord(userID_integer, userName, accessIP, SystemLogService.ACCESS_TYPE_LOGIN);
+
                 result = Response.RESPONSE_RESULT_SUCCESS;
             } catch (UnknownAccountException e) {
                 errorMsg = "unknownAccount";
@@ -82,7 +97,8 @@ public class AccountHandler {
                 errorMsg = "incorrectCredentials";
             } catch (AuthenticationException e) {
                 errorMsg = "authenticationError";
-                e.printStackTrace();
+            } catch (SystemLogServiceException e) {
+                errorMsg = "ServerError";
             }
         } else {
             errorMsg = "already login";

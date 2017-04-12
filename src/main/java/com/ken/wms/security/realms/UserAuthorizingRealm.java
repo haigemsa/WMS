@@ -5,7 +5,6 @@ import com.ken.wms.common.service.Interface.SystemLogService;
 import com.ken.wms.domain.RepositoryAdmin;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.RepositoryAdminManageServiceException;
-import com.ken.wms.exception.SystemLogServiceException;
 import com.ken.wms.exception.UserInfoServiceException;
 import com.ken.wms.security.service.Interface.UserInfoService;
 import com.ken.wms.security.util.EncryptingModel;
@@ -19,8 +18,6 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
@@ -66,22 +63,8 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
                     if (userInfo != null) {
                         // 设置用户角色
                         roles.addAll(userInfo.getRole());
-
-                        // 设置用户信息到 Session 中
-                        Subject currentUser = SecurityUtils.getSubject();
-                        Session session = currentUser.getSession();
-                        List<RepositoryAdmin> repositoryAdmin = (List<RepositoryAdmin>) repositoryAdminManageService.selectByID(userInfo.getUserID()).get("data");
-                        session.setAttribute("repositoryBelong", (repositoryAdmin.isEmpty()) ? "none" : repositoryAdmin.get(0).getRepositoryBelongID());
-
-                        // 记录用户登陆状态，用于作登出日志
-                        session.setAttribute("isAuthenticate", "true");
-                        Integer userID_integer = (Integer) session.getAttribute("userID");
-                        String userName = (String) session.getAttribute("userName");
-//                        String accessIP = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
-                        String accessIP = session.getHost();
-                        systemLogService.insertAccessRecord(userID_integer, userName, accessIP, SystemLogService.ACCESS_TYPE_LOGIN);
                     }
-                } catch (UserInfoServiceException | RepositoryAdminManageServiceException | SystemLogServiceException e) {
+                } catch (UserInfoServiceException e) {
                     // do logger
                 }
             }
@@ -97,8 +80,10 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
      * @return 返回用户的认证信息
      * @throws AuthenticationException 用户认证异常信息
      */
+    @SuppressWarnings("unchecked")
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws
+            AuthenticationException {
 
         String realmName = getName();
         String credentials = "";
@@ -121,6 +106,9 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
                 // 设置部分用户信息到 Session
                 session.setAttribute("userID", userID);
                 session.setAttribute("userName", userInfoDTO.getUserName());
+                List<RepositoryAdmin> repositoryAdmin = (List<RepositoryAdmin>) repositoryAdminManageService.selectByID(userInfoDTO.getUserID()).get("data");
+                session.setAttribute("repositoryBelong", (repositoryAdmin.isEmpty()) ? "none" : repositoryAdmin.get(0).getRepositoryBelongID());
+
 
                 // 结合验证码对密码进行处理
                 String checkCode = (String) session.getAttribute("checkCode");
@@ -132,7 +120,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             }
             return new SimpleAuthenticationInfo(principal, credentials, realmName);
 
-        } catch (UserInfoServiceException | NoSuchAlgorithmException e) {
+        } catch (UserInfoServiceException | RepositoryAdminManageServiceException | NoSuchAlgorithmException e) {
             throw new AuthenticationException();
         }
     }

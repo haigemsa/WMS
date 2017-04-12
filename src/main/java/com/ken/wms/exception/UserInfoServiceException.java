@@ -8,7 +8,7 @@ package com.ken.wms.exception;
  */
 public class UserInfoServiceException extends BusinessException {
 
-    UserInfoServiceException(){
+    public UserInfoServiceException(){
         super();
     }
 
@@ -16,8 +16,12 @@ public class UserInfoServiceException extends BusinessException {
         super(e);
     }
 
-    UserInfoServiceException(Exception e, String exceptionDesc){
+    public UserInfoServiceException(Exception e, String exceptionDesc){
         super(e, exceptionDesc);
+    }
+
+    public UserInfoServiceException(String exceptionDesc){
+        super(exceptionDesc);
     }
 
 }
