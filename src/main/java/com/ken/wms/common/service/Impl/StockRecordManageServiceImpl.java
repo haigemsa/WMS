@@ -168,11 +168,15 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
+        Date newEndDate = null;
         try {
             if (StringUtils.isNotEmpty(startDateStr))
                 startDate = dateFormat.parse(startDateStr);
             if (StringUtils.isNotEmpty(endDateStr))
+            {
                 endDate = dateFormat.parse(endDateStr);
+                newEndDate = new Date(endDate.getTime()+(24*60*60*1000)-1);
+            }
         } catch (ParseException e) {
             throw new StockRecordManageServiceException(e);
         }
@@ -196,8 +200,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                     int stockInRecordLimit = limit / 2;
                     int stockOutRecordLimit = stockInRecordLimit * 2 < limit ? stockInRecordLimit + 1 : stockInRecordLimit;
 
-                    stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, stockInRecordOffset, limit);
-                    stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, stockOutRecordOffset, limit);
+                    stockInTemp = selectStockInRecord(repositoryID, startDate, newEndDate, stockInRecordOffset, limit);
+                    stockOutTemp = selectStockOutRecord(repositoryID, startDate, newEndDate, stockOutRecordOffset, limit);
 
                     stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
                     stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
@@ -223,13 +227,13 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                 break;
             }
             case "stockInOnly": {
-                stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, offset, limit);
+                stockInTemp = selectStockInRecord(repositoryID, startDate, newEndDate, offset, limit);
                 total = (long) stockInTemp.get("total");
                 stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
                 break;
             }
             case "stockOutOnly": {
-                stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, offset, limit);
+                stockOutTemp = selectStockOutRecord(repositoryID, startDate, newEndDate, offset, limit);
                 total = (long) stockOutTemp.get("total");
                 stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
                 break;

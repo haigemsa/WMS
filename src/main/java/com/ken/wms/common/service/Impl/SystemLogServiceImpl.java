@@ -100,12 +100,15 @@ public class SystemLogServiceImpl implements SystemLogService {
         // 转换 Date 对象
         Date startDate = null;
         Date endDate = null;
+        Date newEndDate = null;
         try {
             if (StringUtils.isNotEmpty(startDateStr))
                 startDate = dateFormatSimple.parse(startDateStr);
             if (StringUtils.isNotEmpty(endDateStr))
+            {
                 endDate = dateFormatSimple.parse(endDateStr);
-
+                newEndDate = new Date(endDate.getTime()+(24*60*60*1000)-1);
+            }
         } catch (ParseException e) {
             throw new SystemLogServiceException(e, "Fail to convert string to Date Object");
         }
@@ -128,7 +131,7 @@ public class SystemLogServiceImpl implements SystemLogService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                accessRecordDOS = accessRecordMapper.selectAccessRecords(userID, accessType, startDate, endDate);
+                accessRecordDOS = accessRecordMapper.selectAccessRecords(userID, accessType, startDate, newEndDate);
                 if (accessRecordDOS != null) {
                     accessRecordDOS.forEach(accessRecordDO -> accessRecordDTOS.add(convertAccessRecordDOToAccessRecordDTO(accessRecordDO)));
                     total = new PageInfo<>(accessRecordDOS).getTotal();
@@ -213,11 +216,15 @@ public class SystemLogServiceImpl implements SystemLogService {
         // Date 转换
         Date startDate = null;
         Date endDate = null;
+        Date newEndDate = null;
         try {
             if (StringUtils.isNotEmpty(startDateStr))
                 startDate = dateFormatSimple.parse(startDateStr);
             if (StringUtils.isNotEmpty(endDateStr))
+            {
                 endDate = dateFormatSimple.parse(endDateStr);
+                newEndDate = new Date(endDate.getTime()+(24*60*60*1000)-1);
+            }
         } catch (ParseException e) {
             throw new SystemLogServiceException(e, "Fail to convert String format date to Date Object");
         }
@@ -227,7 +234,7 @@ public class SystemLogServiceImpl implements SystemLogService {
         try {
             if (isPaginarion) {
                 PageHelper.offsetPage(offset, limit);
-                userOperationRecordDOS = userOperationRecordMapper.selectUserOperationRecord(userID, startDate, endDate);
+                userOperationRecordDOS = userOperationRecordMapper.selectUserOperationRecord(userID, startDate, newEndDate);
                 if (userOperationRecordDOS != null) {
                     userOperationRecordDOS.forEach(userOperationRecordDO -> userOperationRecordDTOS.add(convertUserOperationRecordDOToUserOperationRecordDTO(userOperationRecordDO)));
                     total = new PageInfo<>(userOperationRecordDOS).getTotal();
