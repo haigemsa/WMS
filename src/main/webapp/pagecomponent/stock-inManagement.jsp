@@ -532,6 +532,7 @@ function infoModal(type, msg) {
 											<div class="form-group">
 												<label for="" class="form-label">入库仓库：</label>
 												<select name="" id="repository_selector" class="form-control">
+													<option value="">请选择仓库</option>
 												</select>
 											</div>
 										</form>

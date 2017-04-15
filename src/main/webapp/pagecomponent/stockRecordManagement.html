@@ -96,32 +96,32 @@
 										field : 'type',
 										title : '记录类型'
 									}
-									<!--,-->
-									<!--{-->
-										<!--field : 'operation',-->
-										<!--title : '操作',-->
-										<!--formatter : function(value, row, index) {-->
-											<!--var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';-->
-											<!--var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';-->
-											<!--var fun = '';-->
-											<!--return s + ' ' + d;-->
-										<!--},-->
-										<!--events : {-->
-											<!--// 操作列中编辑按钮的动作-->
-											<!--'click .edit' : function(e, value,-->
-													<!--row, index) {-->
-												<!--//selectID = row.id;-->
-												<!--rowEditOperation(row);-->
-											<!--},-->
-											<!--'click .delete' : function(e,-->
-													<!--value, row, index) {-->
-												<!--select_goodsID = row.goodsID;-->
-												<!--select_repositoryID = row.repositoryID-->
-												<!--$('#deleteWarning_modal').modal(-->
-														<!--'show');-->
-											<!--}-->
-										<!--}-->
-									<!--}-->
+//									<!--,-->
+//									<!--{-->
+//										<!--field : 'operation',-->
+//										<!--title : '操作',-->
+//										<!--formatter : function(value, row, index) {-->
+//											<!--var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';-->
+//											<!--var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';-->
+//											<!--var fun = '';-->
+//											<!--return s + ' ' + d;-->
+//										<!--},-->
+//										<!--events : {-->
+//											<!--// 操作列中编辑按钮的动作-->
+//											<!--'click .edit' : function(e, value,-->
+//													<!--row, index) {-->
+//												<!--//selectID = row.id;-->
+//												<!--rowEditOperation(row);-->
+//											<!--},-->
+//											<!--'click .delete' : function(e,-->
+//													<!--value, row, index) {-->
+//												<!--select_goodsID = row.goodsID;-->
+//												<!--select_repositoryID = row.repositoryID-->
+//												<!--$('#deleteWarning_modal').modal(-->
+//														<!--'show');-->
+//											<!--}-->
+//										<!--}-->
+//									<!--}-->
 									 ],
 							url : 'stockRecordManage/searchStockRecord',
 							method : 'GET',
@@ -174,17 +174,17 @@
     </ol>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <form action="" class="form-inline">
                     <div class="form-group">
                         <label class="form-label">仓库编号：</label>
                         <select class="form-control" id="search_repository_ID">
-                            <option value="">所有仓库</option>
+                            <option value="">请选择仓库</option>
                         </select>
                     </div>
                 </form>
             </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <form action="" class="form-inline">
                         <label class="form-label">记录过滤：</label>
                         <select name="" id="search_type" class="form-control">
@@ -194,14 +194,14 @@
                         </select>
                     </form>
                 </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>
                 </button>
             </div>
         </div>
         <div class="row" style="margin-top:20px">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <form action="" class="form-inline">
                     <label class="form-label">日期范围：</label>
                     <input class="form_date form-control" value="" id="search_start_date" name="" placeholder="开始日期">
