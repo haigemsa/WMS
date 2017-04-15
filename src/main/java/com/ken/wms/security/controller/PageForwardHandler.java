@@ -35,8 +35,12 @@ public class PageForwardHandler {
      *
      * @return 跳转的 jsp
      */
-    @RequestMapping("")
+    @RequestMapping("mainPage")
     public String showLoginView() {
+        Subject currentSubject = SecurityUtils.getSubject();
+        if (!currentSubject.isAuthenticated())
+            return "login";
+        else
         return "mainPage";
     }
 }

@@ -205,7 +205,7 @@
 							$('#checkCode').val("");
 						}else{
 							// 页面跳转
-							window.location.href = "/WMS";
+							window.location.href = "/mainPage";
 						}
 					},
 					error:function(data){
