@@ -69,7 +69,7 @@ public class AccountHandler {
         String result = Response.RESPONSE_RESULT_ERROR;
         String errorMsg = "";
 
-        // 获取当前的用户的 Subject
+        // 获取当前的用户的 Subject，shiro
         Subject currentUser = SecurityUtils.getSubject();
 
         // 判断用户是否已经登陆
@@ -80,6 +80,7 @@ public class AccountHandler {
 
             // 执行登陆操作
             try {
+                //会调用realms/UserAuthorizingRealm中的doGetAuthenticationInfo方法
                 currentUser.login(token);
 
                 // 设置登陆状态并记录
@@ -184,7 +185,7 @@ public class AccountHandler {
         BufferedImage checkCodeImage = null;
         String checkCodeString = null;
 
-        // 获取图形验证码
+        // 获取图形验证码，依赖于util/CheckCodeGenerator
         Map<String, Object> checkCode = checkCodeGenerator.generlateCheckCode();
 
         if (checkCode != null) {
@@ -193,6 +194,7 @@ public class AccountHandler {
         }
 
         if (checkCodeString != null && checkCodeImage != null) {
+            //获取response.getOutputStream()
             try (ServletOutputStream outputStream = response.getOutputStream()) {
                 // 设置 Session
                 HttpSession session = request.getSession();

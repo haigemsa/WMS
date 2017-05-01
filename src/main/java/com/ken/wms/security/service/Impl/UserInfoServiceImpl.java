@@ -51,7 +51,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             return null;
 
         try {
-            // 获取用户信息
+            // 获取用户信息,dao.UserInfoMapper;
             UserInfoDO userInfoDO = userInfoMapper.selectByUserID(userID);
             // 获取用户角色信息
             List<RoleDO> roles = userPermissionMapper.selectUserRole(userID);

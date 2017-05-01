@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!--*****************************快捷方式页面********************************-->
 <script>
 $(function(){
 	quickAccessInit();
 })
 // 快捷方式
 function quickAccessInit(){
+    <!--为class为shortcut绑定上点击事件-->
 	$('.shortcut').click(function(){
 		var title = $(this).find('.title').text();
 		var url = $('.menu_item:contains('+ title + ')').attr('name');
@@ -13,9 +15,9 @@ function quickAccessInit(){
 	})
 }
 </script>
-				<!-- 欢迎界面 -->
+				<!-- 整一个欢迎界面div -->
 				<div class="panel panel-default">
-					<!-- 面包屑 -->
+					<!-- 面包屑（主页） -->
 					<ol class="breadcrumb">
 						<li>主页</li>
 					</ol>
@@ -24,6 +26,7 @@ function quickAccessInit(){
 						<div class="row" style="margin-top: 100px; margin-bottom: 100px">
 							<div class="col-md-1"></div>
 							<div class="col-md-10" style="text-align: center">
+								<!--库存查询div-->
 								<div class="col-md-4 col-sm-4">
 									<a href="javascript:void(0)" class="thumbnail shortcut"> <img
 										src="media/icons/stock_search-512.png" alt="库存查询"
@@ -33,6 +36,7 @@ function quickAccessInit(){
 										</div>
 									</a>
 								</div>
+								<!--货物入库div-->
 								<div class="col-md-4 col-sm-4">
 									<a href="javascript:void(0)" class="thumbnail shortcut"> <img
 										src="media/icons/stock_in-512.png" alt="货物入库"
@@ -42,6 +46,7 @@ function quickAccessInit(){
 										</div>
 									</a>
 								</div>
+								<!--货物出库div-->
 								<div class="col-md-4 col-sm-4">
 									<a href="javascript:void(0)" class="thumbnail shortcut"> <img
 										src="media/icons/stock_out-512.png" alt="货物出库"

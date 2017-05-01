@@ -79,6 +79,11 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
      * @param authenticationToken 用户凭证
      * @return 返回用户的认证信息
      * @throws AuthenticationException 用户认证异常信息
+     * Realm的认证方法，自动将token传入，比较token与数据库的数据是否匹配
+     * 验证逻辑是先根据用户名查询用户，
+     * 如果查询到的话再将查询到的用户名和密码放到SimpleAuthenticationInfo对象中，
+     * Shiro会自动根据用户输入的密码和查询到的密码进行匹配，如果匹配不上就会抛出异常，
+     * 匹配上之后就会执行doGetAuthorizationInfo()进行相应的权限验证。
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -96,7 +101,8 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             if (!StringUtils.isNumeric(principal))
                 throw new AuthenticationException();
             Integer userID = Integer.valueOf(principal);
-
+            //依赖于/security.service.Interface.UserInfoService,UserInfoDTO中包含用户ID,用户名，密码，角色
+            //wms_user表
             UserInfoDTO userInfoDTO = userInfoService.getUserInfo(userID);
 
             if (userInfoDTO != null) {
@@ -106,6 +112,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
                 // 设置部分用户信息到 Session
                 session.setAttribute("userID", userID);
                 session.setAttribute("userName", userInfoDTO.getUserName());
+                //获取该用户的所属仓库
                 List<RepositoryAdmin> repositoryAdmin = (List<RepositoryAdmin>) repositoryAdminManageService.selectByID(userInfoDTO.getUserID()).get("data");
                 session.setAttribute("repositoryBelong", (repositoryAdmin.isEmpty()) ? "none" : repositoryAdmin.get(0).getRepositoryBelongID());
 
@@ -118,6 +125,10 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
                     credentials = encryptingModel.MD5(password + checkCode);
                 }
             }
+            //比对账号密码
+            //principal前端传来userid
+            //credentials为数据库的密码，加chexkcode的MD5加密
+            //realmName为com.ken.wms.security.realms.UserAuthorizingRealm_0
             return new SimpleAuthenticationInfo(principal, credentials, realmName);
 
         } catch (UserInfoServiceException | RepositoryAdminManageServiceException | NoSuchAlgorithmException e) {

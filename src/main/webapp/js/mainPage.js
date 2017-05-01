@@ -40,6 +40,7 @@ function signOut() {
 			dataType : "json",
 			contentType : "application/json",
 			success:function(response){
+				//刷新
 				window.location.reload(true);
 			},error:function(response){
 				

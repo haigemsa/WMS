@@ -4,6 +4,7 @@ pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+    <!--//{pageContext.request.contextPath}作用是取出部署应用程序的名字-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>仓库管理系统</title>
     <link rel="stylesheet" type="text/css"
@@ -37,9 +38,11 @@ pageEncoding="UTF-8"%>
                         <a href="#" class="dropdown-toggle"
                            data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
                             <span>欢迎&nbsp;</span> <span id="nav_userName">用户名:${sessionScope.userName}</span>
+                            <!--小三角-->
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <!-通过session获取的name的值-->
                             <shiro:hasRole name="commonsAdmin">
                                 <li>
                                     <a href="#" id="editInfo"> <span
@@ -64,10 +67,12 @@ pageEncoding="UTF-8"%>
         <div id="sideBar" class="col-md-2 col-sm-3">
             <!--  此处加载左侧导航栏 -->
             <!-- 左侧导航栏  -->
+            <!--依照accordion为parent-->
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
+                            <!--<a>链接至class为collapse1的div，即库存管理与出入库管理-->
                             <a href="#collapse1" data-toggle="collapse" data-parent="#accordion"
                                class="parentMenuTitle collapseHead">库存管理</a>
                             <div class="pull-right">
@@ -78,12 +83,14 @@ pageEncoding="UTF-8"%>
                     <div id="collapse1" class="panel-collapse collapse collapseBody">
                         <div class="panel-body">
                             <ul class="list-group">
+                                <!--若为普通管理员-->
                                 <shiro:hasRole name="commonsAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
                                            name="pagecomponent/storageManagementCommon.jsp">库存查询</a>
                                     </li>
                                 </shiro:hasRole>
+                                <!--若为超级管理员-->
                                 <shiro:hasRole name="systemAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
@@ -233,48 +240,48 @@ pageEncoding="UTF-8"%>
             <!--  此处异步加载各个面板 -->
 
             <!-- 欢迎界面 -->
-            <div class="panel panel-default">
-                <!-- 面包屑 -->
-                <ol class="breadcrumb">
-                    <li>主页</li>
-                </ol>
+            <%--<div class="panel panel-default">--%>
+                <%--<!-- 面包屑 -->--%>
+                <%--<ol class="breadcrumb">--%>
+                    <%--<li>主页</li>--%>
+                <%--</ol>--%>
 
-                <div class="panel-body">
-                    <div class="row" style="margin-top: 100px; margin-bottom: 100px">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-10" style="text-align: center">
-                            <div class="col-md-4 col-sm-4">
-                                <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_search-512.png" alt="库存查询"
-                                        class="img-rounded link" style="width: 150px; height: 150px;">
-                                    <div class="caption">
-                                        <h3 class="title">库存查询</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_in-512.png" alt="货物入库"
-                                        class="img-rounded link" style="width: 150px; height: 150px;">
-                                    <div class="caption">
-                                        <h3 class="title">货物入库</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 col-sm-4">
-                                <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_out-512.png" alt="货物出库"
-                                        class="img-rounded link" style="width: 150px; height: 150px;">
-                                    <div class="caption">
-                                        <h3 class="title">货物出库</h3>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                </div>
-            </div>
+                <%--<div class="panel-body">--%>
+                    <%--<div class="row" style="margin-top: 100px; margin-bottom: 100px">--%>
+                        <%--<div class="col-md-1"></div>--%>
+                        <%--<div class="col-md-10" style="text-align: center">--%>
+                            <%--<div class="col-md-4 col-sm-4">--%>
+                                <%--<a href="javascript:void(0)" class="thumbnail shortcut"> <img--%>
+                                        <%--src="media/icons/stock_search-512.png" alt="库存查询"--%>
+                                        <%--class="img-rounded link" style="width: 150px; height: 150px;">--%>
+                                    <%--<div class="caption">--%>
+                                        <%--<h3 class="title">库存查询</h3>--%>
+                                    <%--</div>--%>
+                                <%--</a>--%>
+                            <%--</div>--%>
+                            <%--<div class="col-md-4 col-sm-4">--%>
+                                <%--<a href="javascript:void(0)" class="thumbnail shortcut"> <img--%>
+                                        <%--src="media/icons/stock_in-512.png" alt="货物入库"--%>
+                                        <%--class="img-rounded link" style="width: 150px; height: 150px;">--%>
+                                    <%--<div class="caption">--%>
+                                        <%--<h3 class="title">货物入库</h3>--%>
+                                    <%--</div>--%>
+                                <%--</a>--%>
+                            <%--</div>--%>
+                            <%--<div class="col-md-4 col-sm-4">--%>
+                                <%--<a href="javascript:void(0)" class="thumbnail shortcut"> <img--%>
+                                        <%--src="media/icons/stock_out-512.png" alt="货物出库"--%>
+                                        <%--class="img-rounded link" style="width: 150px; height: 150px;">--%>
+                                    <%--<div class="caption">--%>
+                                        <%--<h3 class="title">货物出库</h3>--%>
+                                    <%--</div>--%>
+                                <%--</a>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
+                        <%--<div class="col-md-1"></div>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+            <%--</div>--%>
 
             <!-- end -->
         </div>

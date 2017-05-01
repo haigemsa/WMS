@@ -99,6 +99,7 @@
 		function refreshCheckCode() {
 			$('#checkCodeImg').click(function() {
 				var timestamp = new Date().getTime();
+				//被AccountHandler类拦截
 				$(this).attr("src", "account/checkCode/" + timestamp)
 			})
 		}
@@ -110,7 +111,7 @@
 			var str3 = $.md5(str2 + checkCode.toUpperCase());
 			return str3;
 		}
-
+		//bootstrapValidator插件对表单进行封装，表单不用加action
 		function validatorInit() {
 			$('#login_form').bootstrapValidator({
 				message : 'This value is not valid',
@@ -169,6 +170,7 @@
 					"id" : userID,
 					"password" : password,
 				}
+				//JSON.stringify(data)序列化
 				$.ajax({
 					type:"POST",
 					url:"account/login",
@@ -200,7 +202,7 @@
 							bv.updateMessage(field,'callback',errorMessage);
 							bv.updateStatus(field,'INVALID','callback');
 							bv.updateStatus("checkCode",'INVALID','callback');
-							
+							//更新验证码
 							$('#checkCodeImg').attr("src","account/checkCode/" + new Date().getTime());
 							$('#checkCode').val("");
 						}else{

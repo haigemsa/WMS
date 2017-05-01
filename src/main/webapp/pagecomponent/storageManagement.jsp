@@ -22,7 +22,7 @@
 		exportStorageAction()
 	})
 
-	// 下拉框選擇動作
+	// 查询方式下拉框，为search_type_storage赋值，若为所有，搜索框不能编辑
 	function optionAction() {
 		$(".dropOption").click(function() {
 			var type = $(this).text();
@@ -48,7 +48,7 @@
 		})
 	}
 
-	// 仓库下拉框数据初始化
+	// 仓库下拉框数据初始化，页面加载时完成
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
@@ -62,6 +62,7 @@
 				limit : -1
 			},
 			success : function(response){
+			    //组装option
 				$.each(response.rows,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
@@ -140,7 +141,7 @@
 											return s + ' ' + d;
 										},
 										events : {
-											// 操作列中编辑按钮的动作
+											// 操作列中编辑按钮的动作，rowEditOperation(row)，传入row
 											'click .edit' : function(e, value,
 													row, index) {
 												//selectID = row.id;
@@ -175,7 +176,7 @@
 		});
 	}
 
-	// 行编辑操作
+	// 行编辑操作模态框展示与数据填充
 	function rowEditOperation(row) {
 		$('#edit_modal').modal("show");
 
@@ -186,7 +187,7 @@
 		$('#storage_number_edit').val(row.number);
 	}
 
-	// 添加供应商模态框数据校验
+	// 添加库存信息模态框数据校验
 	function bootstrapValidatorInit() {
 		$("#storage_form").bootstrapValidator({
 			message : 'This is not valid',
@@ -222,7 +223,7 @@
 		})
 	}
 
-	// 编辑库存信息
+	// 编辑库存信息，表单数据提交
 	function editStorageAction() {
 		$('#edit_modal_submit').click(
 				function() {
@@ -532,6 +533,7 @@
 						<input id="search_input_type" type="text" class="form-control"
 							placeholder="货物ID">
 					</div>
+					<!--通过后台查询仓库信息-->
 					<div class="col-md-3 col-sm-4">
 						<select class="form-control" id="search_input_repository">
 						</select>
@@ -580,7 +582,7 @@
 				<h4 class="modal-title" id="myModalLabel">添加库存记录</h4>
 			</div>
 			<div class="modal-body">
-				<!-- 模态框的内容 -->
+				<!-- 添加库存信息模态框的内容 -->
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-8 col-sm-8">
@@ -647,6 +649,7 @@
 								<h4>点击下面的下载按钮，下载库存信息电子表格</h4>
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
+								<!--下载本地表格，被FileSourceHandler拦截-->
 								<a class="btn btn-info"
 									href="commons/fileSource/download/storageRecord.xlsx"
 									target="_blank"> <span class="glyphicon glyphicon-download"></span>
